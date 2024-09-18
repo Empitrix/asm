@@ -37,7 +37,7 @@ char *get_assemble(char *inpt){
 
 	if(asmbl.ecode == 0){
 
-		for(int i = 0; i < asmbl.len.capture; ++i){
+		for(int i = 0; i < asmbl.len.words; ++i){
 			sprintf(buff, "%s\n", asmbl.lines[i]);
 			strcat(output, buff);
 		}
@@ -61,9 +61,9 @@ char *get_mcode(void){
 	char *buff = malloc(MALL);
 	strcat(buff, "int program[] = {");
 	if(asmbl.ecode == 0){
-		for(int i = 0; i < asmbl.len.capture; ++i){
+		for(int i = 0; i < asmbl.len.words; ++i){
 			char tmp[MALL];
-			if(i == asmbl.len.capture - 1){
+			if(i == asmbl.len.words - 1){
 				sprintf(tmp, "%d", asmbl.mcode[i]);
 			} else {
 				sprintf(tmp, "%d, ", asmbl.mcode[i]);
