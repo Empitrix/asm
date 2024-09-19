@@ -36,6 +36,21 @@ const keywordDescriptions = {
     'EQU': 'Defines a Symbol as an Expression.'
 };
 
+let keyRegex = getLabels(Object.keys(keywordDescriptions));
+
+monaco.languages.setMonarchTokensProvider('8bit', {
+    tokenizer: {
+        root: [
+            [/^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*:/, 'label'],
+            [keyRegex, "keyword"],
+            [/^;.*/, 'comment'],
+            [/;.*$/, 'comment'],
+            [/\b(?<=GOTO\s)([a-zA-Z_][a-zA-Z0-9_]*)\b/, "label"],
+            [/\b(0x[0-9a-fA-F]+\b|0b[01]+\b|\d+)\b/, 'number']
+        ]
+    }
+});
+
 // Register hover provider for the language
 monaco.languages.registerHoverProvider('8bit', {
     provideHover: function (model, position) {
@@ -89,7 +104,7 @@ monaco.editor.defineTheme("8bit", {
 
 let symbolTable = {};
 let labels = [];
-updateSymbolTable(symbolTable, labels);
+//updateSymbolTable(symbolTable, labels);
 
 // Get dynamic symbols regex
 function getDynamicSymbolsRegex() {
@@ -141,7 +156,7 @@ function extractSymbolsFromModel(model) {
             labels.push(match[0]);
         }
     });
-    updateSymbolTable(symbolTable, labels);
+    //updateSymbolTable(symbolTable, labels);
 }
 
 // Initial code
