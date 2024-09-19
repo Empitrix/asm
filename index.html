@@ -1,54 +1,50 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Assembler</title>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8bit CPU Assembler</title>
+    <link rel="stylesheet" href="style.css">
 	<script src="func.js"></script>
-	<script src="index.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
 </head>
 <body>
-	<div class="row">
-		<h1>Assembler</h1>
-		<button onclick="runAssembler()">Assemble</button>
-		<button onclick="copyToClipboard()" id="cpyBtn">Copy</button>
-	</div>
-	<div class="rowContainer">
-		<div id="code" class="editor"></div>
-		<div id="view" class="editor"></div>
-	</div>
-	<div id="machine" class="editor"></div>
 
-	<script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
+<div id="toolbar">
+	<h2 class="title">8bit CPU Assembler</h2>
+    <button class="btn" id="asm_btn" onclick="runAssembler()" >Assemble</button>
+    <button class="btn" id="cpy_btn" onclick="copyToClipboard()">Copy</button>
+</div>
+    <div id="container">
+        <div id="editor-container">
+            <div id="code"></div>
+        </div>
+        <div id="preview">
+        </div>
+    </div>
+    <div id="log"></div>
 	<script>
-		require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' }});
-		window.MonacoEnvironment = { getWorkerUrl: () => proxy };
-		let proxy = URL.createObjectURL(new Blob([`
-			self.MonacoEnvironment = {
-				baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
-			};
-			importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
-		`], { type: 'text/javascript' }));
-		require(["vs/editor/editor.main"], function () {
-			codeEditor = monaco.editor.create(document.getElementById('code'), {
-				language: 'plaintext',
-				renderWhitespace: 'boundary',
-				tabSize: 4,
-				theme: 'vs-dark'
-			});
-			viewEditor = monaco.editor.create(document.getElementById('view'), {
-				language: 'plaintext',
+		require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' }});
+		require(['vs/editor/editor.main'], function () {
+			var script = document.createElement('script');
+			script.src = '8bit.js';
+			document.body.appendChild(script);
+			viewEditor = monaco.editor.create(document.getElementById('preview'), {
+				language: '8bit',
 				readOnly: true,
-				theme: 'vs-dark'
+				theme: 'vs-dark',
+				automaticLayout: true,
 			});
-			machineEditor = monaco.editor.create(document.getElementById('machine'), {
-				language: 'c',
+			machineEditor = monaco.editor.create(document.getElementById('log'), {
 				value: ["int program[] = {};"].join("\n"),
 				readOnly: true,
-				theme: 'vs-dark'
+				theme: 'vs-dark',
+				language:'c',
+				automaticLayout: true,
 			});
 		});
-	</script>
+		</script>
+<script src="index.js"></script>
 </body>
 </html>
