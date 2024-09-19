@@ -2,6 +2,7 @@
 #include "asm/src/asm.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <string.h>
 
 static int counter = 0;
@@ -30,9 +31,7 @@ char *get_assemble(char *inpt){
 	LINES lines = str_split(inpt, "\n");
 	asmbl = assemble(lines);
 
-	char *output = malloc(1024 * sizeof(char));
-	memset(output, 0, 1024 * sizeof(char));
-	sprintf(output, "");
+	char *output = malloc(1024);
 	char buff[300];
 
 	if(asmbl.ecode == 0){
@@ -46,7 +45,7 @@ char *get_assemble(char *inpt){
 	} else {
 		sprintf(output, "%s", asmbl.err.msg);
 		char tmp[100];
-		if(strcpy(asmbl.err.obj, "") != 0){
+		if(strcmp(asmbl.err.obj, "") != 0){
 			sprintf(tmp, " [%s]", asmbl.err.obj);
 		}
 		strcat(output, tmp);

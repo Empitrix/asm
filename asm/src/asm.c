@@ -151,7 +151,6 @@ ASM assemble(LINES ior){
 		}
 
 		if(opfound == 0){
-			update_err("Invalid opcode", opcode);
 			err.msg = "Invalid opcode";
 			err.obj = opcode;
 			asmbl.ecode = 1;
