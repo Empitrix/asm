@@ -27,7 +27,7 @@ function copyToClipboard(){
 
 
 window.onerror = function() {
-  var message = "ERROR";
-  alert(message);
-  return true;
+	var message = "ERROR";
+	alert(message);
+	return true;
 };

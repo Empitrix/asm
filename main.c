@@ -57,18 +57,17 @@ char *get_assemble(char *inpt){
 
 
 char *get_mcode(void){
-	char *buff = malloc(MALL);
-	strcat(buff, "int program[] = {");
-	if(asmbl.ecode == 0){
-		for(int i = 0; i < asmbl.len.words; ++i){
-			char tmp[MALL];
-			if(i == asmbl.len.words - 1){
-				sprintf(tmp, "%d", asmbl.mcode[i]);
-			} else {
-				sprintf(tmp, "%d, ", asmbl.mcode[i]);
-			}
-			strcat(buff, tmp);
+	if(asmbl.ecode != 0){ return ""; }
+	char *buff = malloc(1000);
+	sprintf(buff, "int program[] = {");
+	for(int i = 0; i < asmbl.len.words; ++i){
+		char tmp[1000];
+		if(i == asmbl.len.words - 1){
+			sprintf(tmp, "%d", asmbl.mcode[i]);
+		} else {
+			sprintf(tmp, "%d, ", asmbl.mcode[i]);
 		}
+		strcat(buff, tmp);
 	}
 	strcat(buff, "};");
 	return buff;
