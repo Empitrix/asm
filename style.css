@@ -68,3 +68,7 @@ body {
     font-family: "Roboto Mono"!important;
 }
 
+.divider {
+    height: 1px;
+    width: 100%;
+}
