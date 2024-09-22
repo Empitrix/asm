@@ -35,7 +35,9 @@
 				language: '8bit',
 				readOnly: true,
 				theme: 'vs-dark',
-				automaticLayout: true,
+				lineNumbers: function (lineNumber) {
+					return '0x' + lineNumber.toString(16).toUpperCase().padStart(4, '0');  // Hex with padding
+				}
 			});
 			machineEditor = monaco.editor.create(document.getElementById('log'), {
 				value: ["int program[] = {};"].join("\n"),
