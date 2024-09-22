@@ -1,8 +1,0 @@
-*.out
-*.hex
-*.exe
-*.bin
-/asm_out_bin
-/assembeler
-/assembler
-out_bin
