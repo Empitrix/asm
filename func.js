@@ -1455,6 +1455,8 @@ var _get_assemble = Module["_get_assemble"] = createExportWrapper("get_assemble"
 
 var _get_mcode = Module["_get_mcode"] = createExportWrapper("get_mcode", 0);
 
+var _get_length = Module["_get_length"] = createExportWrapper("get_length", 0);
+
 var _cleanup = Module["_cleanup"] = createExportWrapper("cleanup", 0);
 
 var _fflush = createExportWrapper("fflush", 1);

@@ -46,7 +46,9 @@ monaco.languages.setMonarchTokensProvider('8bit', {
             [/^;.*/, 'comment'],
             [/;.*$/, 'comment'],
             [/\b(?<=GOTO\s)([a-zA-Z_][a-zA-Z0-9_]*)\b/, "label"],
-            [/\b(0x[0-9a-fA-F]+\b|0b[01]+\b|\d+)\b/, 'number']
+            [/\b(0x[0-9a-fA-F]+\b|0b[01]+\b|\d+)\b/, 'number'],
+            [/\b[0-9a-fA-F]+H\b/, 'number'],
+            [/(\'.\')/, 'number'],
         ]
     }
 });

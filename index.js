@@ -1,5 +1,6 @@
 initAssembler = Module.cwrap('get_assemble', 'string', ['string']);
 getMchineCode = Module.cwrap('get_mcode', 'string', ['void']);
+getLength = Module.cwrap('get_length', 'string', ['void']);
 cleanUpCache = Module.cwrap('cleanup', 'void', ['void']);
 
 let editor;
@@ -15,6 +16,7 @@ function runAssembler(){
 	viewEditor.setValue(output)
 	machineDataText = getMchineCode();
 	machineEditor.setValue(machineDataText);
+	document.getElementById("counter").innerHTML = getLength();
 	cleanUpCache();
 }
 

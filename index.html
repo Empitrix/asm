@@ -2,29 +2,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>8bit CPU Assembler</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>8bit CPU Assembler</title>
+	<link rel="stylesheet" href="style.css">
 	<script src="func.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
 </head>
 <body>
 
 <div id="toolbar">
 	<h2 class="title">8bit CPU Assembler</h2>
-    <button class="btn" id="asm_btn" onclick="runAssembler()" >Assemble</button>
-    <button class="btn" id="cpy_btn" onclick="copyToClipboard()">Copy</button>
+	<button class="btn" id="asm_btn" onclick="runAssembler()" >Assemble</button>
+	<button class="btn" id="cpy_btn" onclick="copyToClipboard()">Copy</button>
+	<!--
+	<p id="counter"></p>
+	-->
 </div>
-    <div id="container">
-        <div id="editor-container">
-            <div id="code"></div>
-        </div>
-        <div id="preview">
-        </div>
-    </div>
+	<div id="container">
+		<div id="editor-container">
+			<div id="code"></div>
+		</div>
+		<div id="preview">
+		</div>
+	</div>
 	<div class="divider"></div>
-    <div id="log"></div>
+	<div id="log"></div>
+	<p id="counter"></p>
 	<script>
 		require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' }});
 		require(['vs/editor/editor.main'], function () {

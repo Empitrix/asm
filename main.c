@@ -72,6 +72,12 @@ char *get_mcode(void){
 	return buff;
 }
 
+char *get_length(void){
+	if(asmbl.ecode != 0){ return "Flash: 0, Memory: 0"; }
+	char *buff = (char *)calloc(100, sizeof(char));
+	sprintf(buff, "Flash: %d, Memory: %d", asmbl.len.words, asmbl.len.mem);
+	return buff;
+}
 
 void cleanup(void){
 	clear_cache(&asmbl);
