@@ -72,3 +72,7 @@ char *get_mcode(void){
 	return buff;
 }
 
+
+void cleanup(void){
+	clear_cache(&asmbl);
+}
