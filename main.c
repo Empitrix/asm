@@ -7,18 +7,48 @@
 static int counter = 0;
 
 
+/*
 LINES str_split(char *src, char *split){
 	LINES lines;
-	lines.lines = malloc(MALL);
+	lines.lines = (char **)calloc(MALL, sizeof(char **));
 	lines.len = 0;
 	if(src != NULL && strcmp(src, "") != 0){
 		char* token = strtok(src, split);
 		do {
-			lines.lines[lines.len] = malloc(MALL * sizeof(char));
+			lines.lines[lines.len] = (char *)calloc(MALL, sizeof(char));
 			strcpy(lines.lines[lines.len], token);
 			token = strtok(NULL, split);
 			++lines.len;
 		} while (token != NULL);
+	}
+	return lines;
+}
+*/
+
+LINES str_split(char *src, char *split) {
+	LINES lines;
+	lines.lines = (char **)calloc(MALL, sizeof(char *));
+	lines.len = 0;
+	
+	if (src != NULL && strcmp(src, "") != 0) {
+		int src_len = strlen(src);
+		int split_len = strlen(split);
+		int start = 0;
+		int end = 0;
+
+		while (end <= src_len) {
+			if (strncmp(&src[end], split, split_len) == 0 || src[end] == '\0') {
+				lines.lines[lines.len] = (char *)calloc(end - start + 1, sizeof(char));
+				strncpy(lines.lines[lines.len], &src[start], end - start);
+				// lines.lines[lines.len][end - start] = '\0';  // Null-terminate the token
+				lines.len++;
+				start = end + split_len;
+				// if (lines.len % MALL == 0) {
+				// 	lines.lines = (char **)realloc(lines.lines, (lines.len + MALL) * sizeof(char *));
+				// }
+			}
+			end++;
+		}
 	}
 	return lines;
 }
@@ -30,7 +60,7 @@ char *get_assemble(char *inpt){
 	LINES lines = str_split(inpt, "\n");
 	asmbl = assemble(lines);
 
-	char *output = malloc(1024);
+	char *output = (char *)calloc(1024, sizeof(char));
 	char buff[300];
 
 	if(asmbl.ecode == 0){

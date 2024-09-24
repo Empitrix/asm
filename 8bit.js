@@ -33,7 +33,9 @@ const keywordDescriptions = {
     'OPTION': 'Load the OPTION register.',
     'RETLW': 'Return from a subroutine and place a literal value in the W register.',
     'TRIS': 'Load the TRIS register.',
-    'EQU': 'Defines a Symbol as an Expression.'
+    'EQU': 'Defines a Symbol as an Expression.',
+    'MOVF': 'Move content of the specified register.',
+    'XORLW': 'Exclusive OR a literal value with the W register.',
 };
 
 let keyRegex = getLabels(Object.keys(keywordDescriptions));
@@ -47,8 +49,8 @@ monaco.languages.setMonarchTokensProvider('8bit', {
             [/;.*$/, 'comment'],
             [/\b(?<=GOTO\s)([a-zA-Z_][a-zA-Z0-9_]*)\b/, "label"],
             [/\b(0x[0-9a-fA-F]+\b|0b[01]+\b|\d+)\b/, 'number'],
-            [/\b[0-9a-fA-F]+H\b/, 'number'],
-            [/(\'.\')/, 'number'],
+            [/\b[0-9a-fA-F]{2}H\b/, 'number'],
+            [/(\'(\\t|\\\\|\\n|[^\\])\')/, 'number'],
         ]
     }
 });
