@@ -9,15 +9,40 @@ let machineEditor;
 
 let machineDataText = "int program[] = {};";
 
+function findLabelAddresses(input) {
+    const regex = /GOTO\s+0x([0-9A-Fa-f]+)/g;
+    const labels = [];
+    let match;
+    while ((match = regex.exec(input)) !== null) {
+        labels.push(parseInt(match[1], 16) + 1);
+    }
+    return labels;
+}
+
+function addDecorations(editor, lineNumbers) {
+	const decorations = lineNumbers.map(line => ({
+		range: new monaco.Range(line, 1, line, 1),
+		options: {
+			isWholeLine: false,
+			glyphMarginClassName: "label-icon",
+		},
+	}));
+
+	editor.createDecorationsCollection(decorations);
+}
+
 function runAssembler(){
 	let data = editor.getValue();
 	data += "";
 	let output = initAssembler(data);
+	//remove whitespace from the end of the output
+	output = output.replace(/\s+$/, "");
 	viewEditor.setValue(output)
 	machineDataText = getMchineCode();
 	machineEditor.setValue(machineDataText);
 	document.getElementById("counter").innerHTML = getLength();
 	cleanUpCache();
+	addDecorations(viewEditor, findLabelAddresses(output)); 
 }
 
 

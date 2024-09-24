@@ -148,3 +148,17 @@ body {
 .overlay.active {
 	display: block;
 }
+
+.label-icon {
+    border-radius: 50%;
+    margin-left: 0px;
+    width: 15px !important;
+    height: 15px !important;
+    margin-top: 2px;
+	background: rgb(143, 53, 143);
+}
+.label-icon::before {
+	font-weight: bold;
+	color: rgb(227, 227, 252);
+	content: "L";
+  }

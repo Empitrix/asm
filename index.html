@@ -50,8 +50,9 @@
 				readOnly: true,
 				theme: 'vs-dark',
 				lineNumbers: function (lineNumber) {
-					return '0x' + lineNumber.toString(16).toUpperCase().padStart(4, '0');  // Hex with padding
-				}
+					return '0x' + (lineNumber - 1).toString(16).toUpperCase().padStart(4, '0');  // Hex with padding
+				},
+				glyphMargin: true
 			});
 			machineEditor = monaco.editor.create(document.getElementById('log'), {
 				value: ["int program[] = {};"].join("\n"),
