@@ -33,3 +33,49 @@ function copyToClipboard(){
 window.onerror = function(message, source, line, col, error) {
 	console.log(message, source, line, col, error);
 };
+
+const modal = document.getElementById('overlay');
+const modalInput = document.getElementById('modalInput');
+const copyBtn = document.getElementById('copyBtn');
+const okBtn = document.getElementById('okBtn');
+
+function generateHashtagURL(fragment) {
+	// Encode the fragment to make it URL safe (e.g., spaces become %20)
+	const encodedFragment = encodeURIComponent(fragment);
+
+	// Get the current page URL without any existing fragment
+	const baseUrl = window.location.href.split('#')[0];
+
+	// Generate the new URL with the hashtag fragment
+	const hashtagUrl = `${baseUrl}#${encodedFragment}`;
+
+	return hashtagUrl;
+}
+
+function openShareModal() {
+  // Set the modal to active and insert the current URL
+  modal.classList.add('active');
+  modalInput.value = generateHashtagURL(editor.getValue());
+}
+
+// Copy the URL to the clipboard
+copyBtn.addEventListener('click', () => {
+  modalInput.select();
+  document.execCommand('copy');
+  copyBtn.innerHTML = "Copied!"
+  setTimeout(function() {
+		copyBtn.innerHTML = "Copy";
+	}, 1000)
+});
+
+// Close the modal
+okBtn.addEventListener('click', () => {
+  modal.classList.remove('active');
+});
+
+// Close modal on clicking outside of it
+window.onclick = function(event) {
+  if (event.target == modal) {
+	modal.classList.remove('active');
+  }
+};

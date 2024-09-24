@@ -165,6 +165,13 @@ function extractSymbolsFromModel(model) {
 
 // Initial code
 function getCode() {
+    // Get the fragment part of the URL (text after '#')
+    const fragment = window.location.hash.substring(1); // Remove the '#' character
+    if (fragment) {
+        let code = decodeURIComponent(fragment);
+        return code;
+    }
+
     return [
         "; Initialize registers",
         "BSF 0x01, 3         ; Set bit 3 of register 0x01",
