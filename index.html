@@ -1,70 +1,65 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>8bit CPU Assembler</title>
-	<link rel="stylesheet" href="style.css">
-	<script src="func.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor Layout</title>
+    <script src="loader.min.js"></script>
+
+    <link rel="stylesheet" href="_style.css">
+    <script src="func.js"></script>
 </head>
-<body>
+<body class="dark-mode">
+    <div id="toolbar">
+        <h2 class="title">8bit CPU IDE</h2>
+        <label class="toggleSwitch nolabel" onclick="">
+            <input type="checkbox" id="mode" onchange="setMode()" />
+            <a></a>
+            <span>
+                <span class="left-span">Assembler</span>
+                <span class="right-span">Compiler</span>
+            </span>
+        </label>
+        <button class="btn" id="share_btn" onclick="openShareModal()">Share</button>
+        <button class="btn" id="cpy_btn" onclick="copyToClipboard()">Copy</button>
+        <button class="btn" id="asm_btn" onclick="runAssembler()">Assemble</button>
+        <label class="switch">
+            <input type="checkbox" id="darkModeToggle" checked>
+            <span class="theme"></span>
+        </label>
+    </div>
+    <div id="main">
+        <div id="editor">
+            <div class="tab-buttons">
+                <button id="__c1" class="tab-button " data-tab="c1" disabled>main.c</button>
+                <button id="__code" class="tab-button active" data-tab="code">main.s</button>
+                <button class="tab-button" data-tab="asm2">main.mem</button>
+                <button class="tab-button" data-tab="c2">wokwi</button>
+            </div>
+            <div id="c1-editor" class="editor-container "></div>
+            <div id="code" class="editor-container active"></div>
+            <div id="asm2-editor" class="editor-container"></div>
+            <div id="c2-editor" class="editor-container"></div>
+        </div>
+        <div id="preview"></div>
+    </div>
+    <div class="log-viewer">
+        <div class="log-content" id="logContent">
+        </div>
+    </div>
+    <div id="overlay" class="overlay">
+        <div id="urlModal" class="modal">
+            <div class="modal-header">Share this Code</div>
+            <input id="modalInput" type="text" readonly>
+            <div class="modal-footer">
+                <button class="btn" id="okBtn">OK</button>
+                <button class="btn" id="copyBtn">Copy</button>
+            </div>
+        </div>
+    </div>
+    <script>
 
-	<div id="toolbar">
-		<h2 class="title">8bit CPU Assembler</h2>
-		<button class="btn" id="share_btn" onclick="openShareModal()">Share</button>
-		<button class="btn" id="cpy_btn" onclick="copyToClipboard()">Copy</button>
-		<button class="btn" id="asm_btn" onclick="runAssembler()" >Assemble</button>
-	</div>
-	<div id="container">
-		<div id="editor-container">
-			<div id="code"></div>
-		</div>
-		<div id="preview">
-		</div>
-	</div>
-	<div class="divider"></div>
-	<div id="log"></div>
-	<p id="counter"></p>
-
-	<div id="overlay" class="overlay">
-		<div id="urlModal" class="modal">
-			<div class="modal-header">Share this Code</div>
-			<input id="modalInput" type="text" readonly>
-			<div class="modal-footer">
-			<button class="btn" id="okBtn">OK</button>
-			<button class="btn" id="copyBtn">Copy</button>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' }});
-		require(['vs/editor/editor.main'], function () {
-			var script = document.createElement('script');
-			script.src = '8bit.js';
-			document.body.appendChild(script);
-			viewEditor = monaco.editor.create(document.getElementById('preview'), {
-				language: '8bit',
-				readOnly: true,
-				theme: 'vs-dark',
-				lineNumbers: function (lineNumber) {
-					return '0x' + (lineNumber - 1).toString(16).toUpperCase().padStart(4, '0');  // Hex with padding
-				},
-				glyphMargin: true
-			});
-			machineEditor = monaco.editor.create(document.getElementById('log'), {
-				value: ["int program[] = {};"].join("\n"),
-				readOnly: true,
-				theme: 'vs-dark',
-				language:'c',
-				wordWrap: "on",
-				renderLineHighlightOnlyWhenFocus: true,
-				automaticLayout: true,
-			});
-		});
-		</script>
-	<script src="index.js"></script>
+    </script>
+    <script src="_index.js"></script>
 </body>
 </html>
