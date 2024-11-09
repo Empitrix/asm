@@ -403,20 +403,34 @@ input:checked+.theme:before {
 	display: flow-root;
 	user-select: none;
 }
-.btn {
-	float: right;
-	margin: 5px;
-	padding: 5px 10px;
-	background-color: #007acc; /* Button color */
-	color: white;
-	border: none;
-	cursor: pointer;
-	z-index: 10;
-	border-radius: 3px;
-}
+
 
 #btn:hover {
 	background-color: #005999; /* Button hover color */
+}
+
+.btn {
+    float: right;
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: #007acc;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Hide icons by default on desktop */
+.btn i {
+    display: none;
+}
+
+.btn span {
+    display: inline;
 }
 
 #log {
@@ -605,5 +619,24 @@ input:checked+.theme:before {
 	.switch {
 		margin: 2px;
 	}
+
+
+	    /* Show icons and hide text on mobile */
+		.btn {
+			padding: 2px;
+			margin: 3px;
+			width: 24px;
+			height: 24px;
+			justify-content: center;
+		}
+	
+		.btn i {
+			display: inline-block;
+			font-size: 16px;
+		}
+	
+		.btn span {
+			display: none;
+		}
 }
 

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Editor Layout</title>
     <script src="loader.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 
     <link rel="stylesheet" href="style.css">
     <script src="func.js"></script>
@@ -20,9 +22,18 @@
                 <span class="right-span">Compiler</span>
             </span>
         </label>
-        <button class="btn" id="share_btn" onclick="openShareModal()">Share</button>
-        <button class="btn" id="cpy_btn" onclick="copyToClipboard()">Copy</button>
-        <button class="btn" id="asm_btn" onclick="runAssembler()">Assemble</button>
+        <button class="btn" id="share_btn" onclick="openShareModal()">
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span>
+        </button>
+        <button class="btn" id="cpy_btn" onclick="copyToClipboard()">
+            <i class="fas fa-copy"></i>
+            <span>Copy</span>
+        </button>
+        <button class="btn" id="asm_btn" onclick="runAssembler()">
+            <i class="fas fa-play"></i>
+            <span>Assemble</span>
+        </button>
         <label class="switch">
             <input type="checkbox" id="darkModeToggle" checked>
             <span class="theme"></span>
