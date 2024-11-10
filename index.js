@@ -174,14 +174,57 @@ function runAssembler(){
 }
 
 
-function copyToClipboard(){
-	var btn = document.getElementById("cpy_btn");
-	btn.innerHTML = "Copied!"
-	setTimeout(function() {
-		btn.innerHTML = "Copy";
-	}, 1000)
-	navigator.clipboard.writeText(machineDataText);
+async function copyToClipboard() {
+    try {
+        // Find the active tab button
+        const activeTab = document.querySelector('.tab-button.active');
+        if (!activeTab) {
+            showToast('No active tab found!', 'error');
+            return;
+        }
+
+        // Get the tab ID
+        const tabId = activeTab.getAttribute('data-tab');
+        let content = '';
+
+        switch (tabId) {
+            case 'code':
+                content = editor.getValue();
+                break;
+            case 'c1':
+                content = editors.c1.getValue();
+                break;
+            case 'asm2':
+                content = editors.asm2.getValue();
+                break;
+            case 'c2':
+                content = editors.c2.getValue();
+                break;
+            default:
+                showToast('Unable to find editor content!', 'error');
+                return;
+        }
+
+        // Check if we got any content
+        if (!content && content !== '') {  // Allow empty string but not null/undefined
+            showToast('No content to copy!', 'error');
+            return;
+        }
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(content);
+        
+        // Show success message with tab name
+        const tabName = activeTab.textContent.trim();
+        showToast(`${tabName} content copied!`, 'success');
+
+    } catch (error) {
+        // Handle errors
+        showToast('Failed to copy: ' + error.message, 'error');
+        console.error('Copy failed:', error);
+    }
 }
+
 
 window.onerror = function(message, source, line, col, error) {
 	console.log(message, source, line, col, error);
@@ -232,3 +275,56 @@ window.onclick = function(event) {
 	modal.classList.remove('active');
   }
 };
+// Add this to your JavaScript file (func.js or index.js)
+
+// Create toast container if it doesn't exist
+function createToastContainer() {
+    if (!document.getElementById('toast-container')) {
+        const container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+}
+
+// Function to show toast message
+function showToast(message, type = 'info', duration = 3000) {
+    createToastContainer();
+    
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    // Add icon based on type
+    let icon = '';
+    switch(type) {
+        case 'success':
+            icon = '<i class="fas fa-check-circle"></i>';
+            break;
+        case 'error':
+            icon = '<i class="fas fa-exclamation-circle"></i>';
+            break;
+        case 'info':
+            icon = '<i class="fas fa-info-circle"></i>';
+            break;
+    }
+    
+    // Set toast content
+    toast.innerHTML = `${icon}<span>${message}</span>`;
+    
+    // Add toast to container
+    const container = document.getElementById('toast-container');
+    container.appendChild(toast);
+    
+    // Show toast
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    // Hide and remove toast after duration
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            container.removeChild(toast);
+        }, 300);
+    }, duration);
+}
