@@ -126,7 +126,6 @@ function updateSymbolTable(newSymbols, labels) {
     symbolTable = { ...symbolTable, ...newSymbols };
     let labelRegex = getLabels(labels);
     let keyRegex = getLabels(Object.keys(keywordDescriptions));
-    console.log(labelRegex);
     monaco.languages.setMonarchTokensProvider('8bit', {
         tokenizer: {
             root: [
@@ -153,7 +152,6 @@ function extractSymbolsFromModel(model) {
             const symbol = match[1];
             const expression = match[2];
             symbolTable[symbol] = expression; // Add to symbol table
-            console.log(JSON.stringify(symbolTable));
         }
         match = line.match(/\b(?<=GOTO\s)([a-zA-Z_][a-zA-Z0-9_]*)\b/);
         if (match && match[0].length > 1) {
@@ -172,18 +170,14 @@ function getCode() {
         return code;
     }
 
-    return [
-        "; Initialize registers",
-        "BSF 0x01, 3         ; Set bit 3 of register 0x01",
-        "BCF 0x02, 0         ; Clear bit 0 of register 0x02",
-        "Timer EQU 0x01",
-        "GPIO EQU 0x06       ; Define a constant for the GPIO register address",
-        "start:",
-        "    BSF GPIO, 0     ; Set bit 0 of the GPIO register (turn on the LED)",
-        "    NOP             ; Do nothing (introduce a small delay)",
-        "    BCF GPIO, 0     ; Clear bit 0 of the GPIO register (turn off the LED)",
-        "    GOTO start      ; Jump back to the beginning (infinite loop)"
-    ].join("\n");
+     
+    let asm =`GPIO EQU 0x06   ; Define a constant for the GPIO register address
+start:
+    BSF GPIO, 0   ; Set bit 0 of the GPIO register (turn on the LED)
+    NOP           ; Do nothing (introduce a small delay)
+    BCF GPIO, 0   ; Clear bit 0 of the GPIO register (turn off the LED)
+    GOTO start    ; Jump back to the beginning (infinite loop)`;
+    return asm;
 }
 
 // Create the editor instance
@@ -215,11 +209,6 @@ function createEditor() {
         // This method will be triggered when the action is executed
         run: function (ed) {
             const selectedText = ed.getModel().getValueInRange(ed.getSelection());
-            if (selectedText) {
-                console.log('Selected text:', selectedText);
-            } else {
-                console.log('No text selected.');
-            }
             runAssembler();
         }
 

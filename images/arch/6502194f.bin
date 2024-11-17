@@ -1,0 +1,7 @@
+// to run: tcc -run hello.c
+#include <stdio.h>
+
+main()
+{
+    printf("Hello, world\n");
+}

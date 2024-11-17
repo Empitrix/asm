@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code Editor Layout</title>
     <script src="loader.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <script src="build/v86_all.js"></script>
 
     <link rel="stylesheet" href="style.css">
     <script src="func.js"></script>
 </head>
+
 <body class="dark-mode">
     <div id="toolbar">
         <h2 class="title">Amethyst</h2>
@@ -34,10 +36,7 @@
             <i class="fas fa-play"></i>
             <span>Assemble</span>
         </button>
-        <label class="switch">
-            <input type="checkbox" id="darkModeToggle" checked>
-            <span class="theme"></span>
-        </label>
+  
     </div>
     <div id="main">
         <div id="editor">
@@ -52,7 +51,37 @@
             <div id="asm2-editor" class="editor-container"></div>
             <div id="c2-editor" class="editor-container"></div>
         </div>
-        <div id="preview"></div>
+        <div id="preview" class="loading-container loading">
+
+            <input style="display: none;" type="number" min="0.25" step="0.25" value="2.25" id="scale"
+                style="width: 50px">
+
+            <pre id="loading"></pre>
+
+            <div id="screen_container">
+                <div id="screen"></div>
+                <canvas id="vga"></canvas>
+            </div>
+
+            <div id="filesystem_panel" style=" display: none;" >
+
+                <input type="file" id="filesystem_send_file" multiple>
+                <input type="text" id="filesystem_get_file">
+
+
+
+            </div>
+            <div class="loading-overlay">
+                <div class="retro-loader">
+                  <div class="pacman"></div>
+                  <div class="dot"></div>
+                  <div class="dot"></div>
+                  <div class="dot"></div>
+                  <div class="ghost"></div>
+                </div>
+              </div>
+
+        </div>
     </div>
     <div class="log-viewer">
         <div class="log-content" id="logContent">
@@ -73,4 +102,5 @@
     </script>
     <script src="index.js"></script>
 </body>
+
 </html>
