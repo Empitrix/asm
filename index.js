@@ -170,7 +170,7 @@ runnerState = setInterval(runner, 50);
 
 function startUp() {
     sendKeyEvents("cd ..\n");
-    uploadFromUrl("/cpu.emu");
+    uploadFromUrl("/asm/cpu.emu");
     sendKeyEvents("chmod +x cpu.emu\n");
     sendKeyEvents("touch bin.bin\n");
     sendKeyEvents("./cpu.emu -p bin.bin -c -s\n");
