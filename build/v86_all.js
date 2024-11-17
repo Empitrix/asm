@@ -1886,7 +1886,7 @@ function Wa(a, b) {
         };
         document.body.appendChild(Ba);
         
-        setTimeout(() => startUp(), 1000);
+        setTimeout(() => startUp(), 2000);
     }
 
 

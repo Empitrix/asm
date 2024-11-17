@@ -170,10 +170,10 @@ runnerState = setInterval(runner, 50);
 
 function startUp() {
     sendKeyEvents("cd ..\n");
-    uploadFromUrl("/cpu");
-    sendKeyEvents("chmod +x cpu\n");
+    uploadFromUrl("/cpu.emu");
+    sendKeyEvents("chmod +x cpu.emu\n");
     sendKeyEvents("touch bin.bin\n");
-    sendKeyEvents("./cpu -p bin.bin -c -s\n");
+    sendKeyEvents("./cpu.emu -p bin.bin -c -s\n");
     setTimeout(() => stopLoading(), 2000);
 }
 
@@ -419,7 +419,7 @@ function runAssembler() {
         setTimeout(() => createAndUploadBinFile(machineDataText), 1500);
 
         addLogEntry("INFO", "File uploaded to filesystem");
-        setTimeout(() => sendKeyEvents("./cpu -p app.bin -c -s\n"), 2600);
+        setTimeout(() => sendKeyEvents("./cpu.emu -p app.bin -c -s\n"), 2600);
 
         addLogEntry("INFO", "Starting execution");
         setTimeout(() => stopLoading(), 3000);
