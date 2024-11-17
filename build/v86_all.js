@@ -682,7 +682,6 @@ function Wa(a, b) {
     }
 
     function b(r) {
-        document.title = r + " - Virtual x86";
         const n = document.querySelector("meta[name=description]");
         n && (n.content = "Running " + r)
     }
