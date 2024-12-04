@@ -4,31 +4,17 @@
 #include <stdarg.h>
 #include <string.h>
 
-static int counter = 0;
+
+static ASMBL asmbl;
+
+static char len_buffer[100] = { 0 };
+static char mcode_buffer[1000] = { 0 };
+static char output_buffer[1024] = { 0 };
 
 
-/*
-LINES str_split(char *src, char *split){
-	LINES lines;
-	lines.lines = (char **)calloc(MALL, sizeof(char **));
-	lines.len = 0;
-	if(src != NULL && strcmp(src, "") != 0){
-		char* token = strtok(src, split);
-		do {
-			lines.lines[lines.len] = (char *)calloc(MALL, sizeof(char));
-			strcpy(lines.lines[lines.len], token);
-			token = strtok(NULL, split);
-			++lines.len;
-		} while (token != NULL);
-	}
-	return lines;
-}
-*/
-
-LINES str_split(char *src, char *split) {
-	LINES lines;
-	lines.lines = (char **)calloc(MALL, sizeof(char *));
-	lines.len = 0;
+void str_split(char *src, char *split, TBL *tbl){
+	memset(tbl->lines, 0, sizeof(tbl->lines));
+	tbl->len = 0;
 	
 	if (src != NULL && strcmp(src, "") != 0) {
 		int src_len = strlen(src);
@@ -38,57 +24,55 @@ LINES str_split(char *src, char *split) {
 
 		while (end <= src_len) {
 			if (strncmp(&src[end], split, split_len) == 0 || src[end] == '\0') {
-				lines.lines[lines.len] = (char *)calloc(end - start + 1, sizeof(char));
-				strncpy(lines.lines[lines.len], &src[start], end - start);
-				// lines.lines[lines.len][end - start] = '\0';  // Null-terminate the token
-				lines.len++;
+				strncpy(tbl->lines[tbl->len], &src[start], end - start);
+				tbl->len++;
 				start = end + split_len;
-				// if (lines.len % MALL == 0) {
-				// 	lines.lines = (char **)realloc(lines.lines, (lines.len + MALL) * sizeof(char *));
-				// }
 			}
 			end++;
 		}
 	}
-	return lines;
 }
 
 
-static ASM asmbl;
+
 
 char *get_assemble(char *inpt){
-	LINES lines = str_split(inpt, "\n");
-	asmbl = assemble(lines);
+	TBL tbl;
+	str_split(inpt, "\n", &tbl);
+	asmbl.ecode = 0;
+	assemble(&asmbl, &tbl);
 
-	char *output = (char *)calloc(1024, sizeof(char));
-	char buff[300];
+	memset(output_buffer, 0, sizeof(output_buffer));
+	char buff[300] = { 0 };
 
 	if(asmbl.ecode == 0){
 
 		for(int i = 0; i < asmbl.len.words; ++i){
 			sprintf(buff, "%s\n", asmbl.lines[i]);
-			strcat(output, buff);
+			strcat(output_buffer, buff);
 		}
 
-		return output;
+		return output_buffer;
+
 	} else {
-		sprintf(output, "%s", asmbl.err.msg);
-		char tmp[100];
-		if(strcmp(asmbl.err.obj, "") != 0){
-			sprintf(tmp, " [%s]", asmbl.err.obj);
-		}
-		strcat(output, tmp);
-		sprintf(tmp, " at line (%d):\n==>%s\n", asmbl.err.lnum, asmbl.err.oline);
-		strcat(output, tmp);
-		return output;
+		show_err(&asmbl.err, output_buffer);
+		// sprintf(output_buffer, "%s", asmbl.err.msg);
+		// char tmp[100];
+		// if(strcmp(asmbl.err.obj, "") != 0){
+		// 	sprintf(tmp, " [%s]", asmbl.err.obj);
+		// }
+		// strcat(output_buffer, tmp);
+		// sprintf(tmp, " at line (%d):\n==>%s\n", asmbl.err.lnum, asmbl.err.line);
+		// strcat(output_buffer, tmp);
+		return output_buffer;
 	}
 }
 
 
 char *get_mcode(void){
 	if(asmbl.ecode != 0){ return ""; }
-	char *buff = malloc(1000);
-	sprintf(buff, "int program[] = {");
+	memset(mcode_buffer, 0, sizeof(mcode_buffer));
+	sprintf(mcode_buffer, "int program[] = {");
 	for(int i = 0; i < asmbl.len.words; ++i){
 		char tmp[1000];
 		if(i == asmbl.len.words - 1){
@@ -96,19 +80,17 @@ char *get_mcode(void){
 		} else {
 			sprintf(tmp, "%d, ", asmbl.mcode[i]);
 		}
-		strcat(buff, tmp);
+		strcat(mcode_buffer, tmp);
 	}
-	strcat(buff, "};");
-	return buff;
+	strcat(mcode_buffer, "};");
+	return mcode_buffer;
 }
+
 
 char *get_length(void){
 	if(asmbl.ecode != 0){ return "Flash: 0, Memory: 0"; }
-	char *buff = (char *)calloc(100, sizeof(char));
-	sprintf(buff, "Flash: %d, Memory: %d", asmbl.len.words, asmbl.len.mem);
-	return buff;
+	memset(len_buffer, 0, sizeof(len_buffer));
+	sprintf(len_buffer, "Flash: %d, Memory: %d", asmbl.len.words, asmbl.len.mem);
+	return len_buffer;
 }
 
-void cleanup(void){
-	clear_cache(&asmbl);
-}

@@ -1,7 +1,6 @@
 initAssembler = Module.cwrap('get_assemble', 'string', ['string']);
 getMchineCode = Module.cwrap('get_mcode', 'string', ['void']);
 getLength = Module.cwrap('get_length', 'string', ['void']);
-cleanUpCache = Module.cwrap('cleanup', 'void', ['void']);
 let vm_state = false;
 let Running = null;
 
@@ -426,7 +425,6 @@ function runAssembler() {
         setTimeout(() => stepping(), 3000);
         
     }
-    cleanUpCache();
     addDecorations(editors.asm2, findLabelAddresses(output));
 }
 async function copyToClipboard() {
