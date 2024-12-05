@@ -1,8 +1,10 @@
 #include "../assembler.h"
+#include "../../compiler.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+
 
 
 static ASMBL asmbl;
@@ -10,6 +12,9 @@ static ASMBL asmbl;
 static char len_buffer[100] = { 0 };
 static char mcode_buffer[1000] = { 0 };
 static char output_buffer[1024] = { 0 };
+
+static char compiler_buffer[1024] = { 0 };
+
 
 
 void str_split(char *src, char *split, TBL *tbl){
@@ -93,4 +98,40 @@ char *get_length(void){
 	sprintf(len_buffer, "Flash: %d, Memory: %d", asmbl.len.words, asmbl.len.mem);
 	return len_buffer;
 }
+
+
+/* COMPIELR */
+
+char *run_compiler(char *inpt){
+	memset(compiler_buffer, 0, sizeof(compiler_buffer));
+
+	compiler_clean();
+
+	TKNS tkns;
+	tokenizer(inpt, &tkns);
+
+
+	add_tree("STATUS EQU 0x03  ; Added by Compiler (only for pic10f200)");
+	add_tree("Z EQU 0x02       ; Added by Compiler (only for pic10f200)");
+	add_tree("C EQU 0x00       ; Added by Compiler (only for pic10f200)");
+	add_tree("CRAM EQU 0x19    ; Compiler Reserved Address");
+
+
+	qparser(&tkns, 0, AST_NO_STATEMENT);
+	update_children();
+
+
+	generator(qasts, 0, qast_idx);  // Generate Assembley code
+	reorder();                      // Reorder functions for linker
+
+
+
+	int i;
+	for(i = 0; i < tree_idx; ++i){
+		strcatf(compiler_buffer, "%s\n", tree[i]);
+	}
+
+	return compiler_buffer;
+}
+
 

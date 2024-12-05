@@ -1,6 +1,11 @@
 initAssembler = Module.cwrap('get_assemble', 'string', ['string']);
 getMchineCode = Module.cwrap('get_mcode', 'string', ['void']);
 getLength = Module.cwrap('get_length', 'string', ['void']);
+initCompiler = Module.cwrap('run_compiler', 'string', ['string']);
+
+let assemblerMode = true;
+
+
 let vm_state = false;
 let Running = null;
 
@@ -240,13 +245,17 @@ tabButtons.forEach(button => {
         activateTab(tabName);
     });
 });
+
+
 function setMode() {
     const checkbox = document.getElementById('mode');
     if (checkbox.checked) {
         activateTab('c1');
         document.getElementById("__c1").disabled = false;
         editor.updateOptions({ readOnly: true });
+				assemblerMode = false;
     } else {
+				assemblerMode = true;
         activateTab("code");
         document.getElementById("__c1").disabled = true;
         editor.readOnly = false;
@@ -396,10 +405,31 @@ function stepping() {
         Running = setInterval(() => sendKeyEvents(" "), 1000);
     }
 }
+
+function runCompiler(){
+	content = editors.c1.getValue();
+	let data = initCompiler(content);
+	//console.log("------------------------->");
+	//console.log(data);
+	//console.log("<-------------------------");
+	return data;
+}
+
 function runAssembler() {
-    let data = editor.getValue();
-    data += "";
-    let output = initAssembler(data);
+
+    let output = "";
+
+		if(assemblerMode){
+			let data = editor.getValue();
+			data += "";
+			output = initAssembler(data);
+		} else {
+			output = runCompiler();
+			editor.setValue(output);
+		}
+
+
+
     //remove whitespace from the end of the output
     output = output.replace(/\s+$/, "");
     editors.asm2.setValue(output)
