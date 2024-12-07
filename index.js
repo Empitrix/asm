@@ -224,7 +224,7 @@ require(['vs/editor/editor.main'], function () {
             theme: 'vs-dark'
         }),
         asm2: monaco.editor.create(document.getElementById('asm2-editor'), {
-            value: '// Machine Code\n',
+            value: '',
             language: '8bit',
             theme: 'vs-dark',
             lineNumbers: function (lineNumber) {
@@ -234,10 +234,11 @@ require(['vs/editor/editor.main'], function () {
             readOnly: true
         }),
         c2: monaco.editor.create(document.getElementById('c2-editor'), {
-            value: '// C Code 2\n',
+            value: '',
             language: 'c',
             theme: 'vs-dark',
-            readOnly: true
+            readOnly: true,
+            wrappingColumn: 100,
         })
     };
     window.addEventListener('resize', () => {

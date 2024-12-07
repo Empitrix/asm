@@ -62,7 +62,7 @@
             <div id="help-editor" class="editor-container">
                 <div id="content" style="padding: 0 10px 10px 10px; width: 95vw;"></div>
                 <script>
-                    fetch('/help.md')
+                    fetch('/asm/help.md')
                         .then(response => response.text())
                         .then(data => {
                             document.getElementById('content').innerHTML = marked.parse(data);
