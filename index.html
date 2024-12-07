@@ -15,6 +15,8 @@
 </head>
 
 <body class="dark-mode">
+    <header>
+    
     <div id="toolbar">
         <h2 class="title">Amethyst</h2>
 
@@ -46,15 +48,17 @@
         </label>
 
     </div>
+    <div class="tab-buttons">
+        <button id="__c1" class="tab-button " data-tab="c1" disabled>main.c</button>
+        <button id="__code" class="tab-button active" data-tab="code">main.s</button>
+        <button class="tab-button" data-tab="asm2">main.mem</button>
+        <button class="tab-button" data-tab="c2">wokwi</button>
+        <button class="tab-button" data-tab="help">help</button>
+    </div>
+</header>
     <div id="main">
         <div id="editor">
-            <div class="tab-buttons">
-                <button id="__c1" class="tab-button " data-tab="c1" disabled>main.c</button>
-                <button id="__code" class="tab-button active" data-tab="code">main.s</button>
-                <button class="tab-button" data-tab="asm2">main.mem</button>
-                <button class="tab-button" data-tab="c2">wokwi</button>
-                <button class="tab-button" data-tab="help">help</button>
-            </div>
+
             <div id="c1-editor" class="editor-container "></div>
             <div id="code" class="editor-container active"></div>
             <div id="asm2-editor" class="editor-container"></div>

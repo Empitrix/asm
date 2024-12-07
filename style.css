@@ -68,6 +68,7 @@ body.dark-mode {
 
 .tab-buttons {
 	display: flex;
+	background-color: #1e1e1e;
 }
 
 .tab-button {
@@ -881,4 +882,10 @@ input:checked+.theme:before {
   @keyframes chomp {
 	0% { clip-path: polygon(100% 74%, 44% 48%, 100% 21%); }
 	100% { clip-path: polygon(100% 60%, 44% 48%, 100% 36%); }
+  }
+
+  header {
+	position: sticky;
+	top: 0;
+	z-index: 1000; /* Adjust as needed */
   }
