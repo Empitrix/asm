@@ -213,7 +213,6 @@ function createEditor() {
         }
 
     });
-    runAssembler();
 }
 
 // Initialize the editor when the page loads

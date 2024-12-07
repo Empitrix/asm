@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amethyst IDE</title>
-    <script src="loader.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="loader.min.js"></script>
     <script src="build/v86_all.js"></script>
 
     <link rel="stylesheet" href="style.css">
@@ -16,14 +17,12 @@
 <body class="dark-mode">
     <div id="toolbar">
         <h2 class="title">Amethyst</h2>
-        <label class="toggleSwitch nolabel" onclick="">
-            <input type="checkbox" id="mode" onchange="setMode()" />
-            <a></a>
-            <span>
-                <span class="left-span">Assembler</span>
-                <span class="right-span">Compiler</span>
-            </span>
-        </label>
+
+        <button class="btn" id="share_btn" onclick="activateTab('help')">
+            <i class="fas fa-question"></i>
+            <span>help</span>
+        </button>
+
         <button class="btn" id="share_btn" onclick="openShareModal()">
             <i class="fas fa-share-alt"></i>
             <span>Share</span>
@@ -34,9 +33,18 @@
         </button>
         <button class="btn" id="asm_btn" onclick="runAssembler()">
             <i class="fas fa-play"></i>
-            <span>Assemble</span>
+            <span>Run</span>
         </button>
-  
+
+        <label class="toggleSwitch nolabel" onclick="">
+            <input type="checkbox" id="mode" onchange="setMode()" />
+            <a></a>
+            <span>
+                <span class="left-span">Assembler</span>
+                <span class="right-span">Compiler</span>
+            </span>
+        </label>
+
     </div>
     <div id="main">
         <div id="editor">
@@ -45,11 +53,27 @@
                 <button id="__code" class="tab-button active" data-tab="code">main.s</button>
                 <button class="tab-button" data-tab="asm2">main.mem</button>
                 <button class="tab-button" data-tab="c2">wokwi</button>
+                <button class="tab-button" data-tab="help">help</button>
             </div>
             <div id="c1-editor" class="editor-container "></div>
             <div id="code" class="editor-container active"></div>
             <div id="asm2-editor" class="editor-container"></div>
             <div id="c2-editor" class="editor-container"></div>
+            <div id="help-editor" class="editor-container">
+                <div id="content" style="padding: 0 10px 10px 10px;">hiiiiiiiiiii</div>
+                <script>
+                    fetch('https://github.com/Empitrix/amethyst/raw/refs/heads/master/README.md')
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById('content').innerHTML = marked.parse(data);
+                        })
+                        .catch(error => {
+                            console.error('Error fetching the Markdown file:', error);
+                            data = '# Amethyst\n\nAmethyst is a cross-platform compiler/assembler for pic10f20x MCUs.\n\nFor more information, visit the [GitHub repository](https://github.com/Empitrix/amethyst/blob/master/README.md).';
+                            document.getElementById('content').innerHTML = marked.parse(data);
+                        });
+                </script>
+            </div>
         </div>
         <div id="preview" class="loading-container loading">
 
@@ -63,23 +87,19 @@
                 <canvas id="vga"></canvas>
             </div>
 
-            <div id="filesystem_panel" style=" display: none;" >
-
+            <div id="filesystem_panel" style=" display: none;">
                 <input type="file" id="filesystem_send_file" multiple>
                 <input type="text" id="filesystem_get_file">
-
-
-
             </div>
             <div class="loading-overlay">
                 <div class="retro-loader">
-                  <div class="pacman"></div>
-                  <div class="dot"></div>
-                  <div class="dot"></div>
-                  <div class="dot"></div>
-                  <div class="ghost"></div>
+                    <div class="pacman"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="ghost"></div>
                 </div>
-              </div>
+            </div>
 
         </div>
     </div>

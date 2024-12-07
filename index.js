@@ -2,9 +2,38 @@ initAssembler = Module.cwrap('get_assemble', 'string', ['string']);
 getMchineCode = Module.cwrap('get_mcode', 'string', ['void']);
 getLength = Module.cwrap('get_length', 'string', ['void']);
 initCompiler = Module.cwrap('run_compiler', 'string', ['string']);
+//load assembler mode from local storage
+let assemblerMode = localStorage.getItem('mode') === 'assembler';
+if (!assemblerMode) {
+    const checkbox = document.getElementById('mode');
+    checkbox.checked = true;
+}
 
-let assemblerMode = true;
 
+c_code = `#define GPIO 0x06  // Set 0x06 as GPIO
+
+int i = 0;
+int j = 0;
+
+// put a character into the console
+int putchar(char c){
+  \`MOVF { c }, W\`;     // Put "c" into W register
+  \`MOVWF { GPIO }\`;    // Move value of W register to "GPIO"
+  \`BSF { GPIO }, 7\`;   // Set bit 7 of "GPIO"
+  \`CLRF { GPIO }\`;     // Set value of "GPIO" to 0
+  return 0;
+}
+
+int main(){
+  for(i = 0; i <= 5; i++){
+    for(j = 0; j <= i; j++){
+      putchar('*');
+    }
+    putchar('\\n');
+  }
+  putchar('\\n');
+  return 0;
+}`
 
 let vm_state = false;
 let Running = null;
@@ -190,7 +219,7 @@ require(['vs/editor/editor.main'], function () {
     document.body.appendChild(script);
     editors = {
         c1: monaco.editor.create(document.getElementById('c1-editor'), {
-            value: '// C Code 1\n',
+            value: c_code,
             language: 'c',
             theme: 'vs-dark'
         }),
@@ -253,13 +282,16 @@ function setMode() {
         activateTab('c1');
         document.getElementById("__c1").disabled = false;
         editor.updateOptions({ readOnly: true });
-				assemblerMode = false;
+        editor.readOnly = true;
+        assemblerMode = false;
+        localStorage.setItem('mode', 'compiler');
     } else {
-				assemblerMode = true;
         activateTab("code");
         document.getElementById("__c1").disabled = true;
         editor.readOnly = false;
+        assemblerMode = true;
         editor.updateOptions({ readOnly: false });
+        localStorage.setItem('mode', 'assembler');
     }
 }
 
@@ -397,7 +429,6 @@ function createAndUploadBinFile(arrayStr, fileName = "app.bin") {
     // Create and dispatch the change event
     const event = new Event('change', { bubbles: true });
     fileInput.dispatchEvent(event);
-
 }
 
 function stepping() {
@@ -406,29 +437,20 @@ function stepping() {
     }
 }
 
-function runCompiler(){
-	content = editors.c1.getValue();
-	let data = initCompiler(content);
-	//console.log("------------------------->");
-	//console.log(data);
-	//console.log("<-------------------------");
-	return data;
-}
 
 function runAssembler() {
 
-    let output = "";
-
-		if(assemblerMode){
-			let data = editor.getValue();
-			data += "";
-			output = initAssembler(data);
-		} else {
-			output = runCompiler();
-			editor.setValue(output);
-		}
-
-
+    let data = "";
+    if (assemblerMode === false) {
+        let content = editors.c1.getValue();
+        data = initCompiler(content);
+        editor.setValue(data);
+    }
+    else {
+        data = editor.getValue();
+    }
+    data += "";
+    let output = initAssembler(data);
 
     //remove whitespace from the end of the output
     output = output.replace(/\s+$/, "");
@@ -453,7 +475,7 @@ function runAssembler() {
         addLogEntry("INFO", "Starting execution");
         setTimeout(() => stopLoading(), 3000);
         setTimeout(() => stepping(), 3000);
-        
+
     }
     addDecorations(editors.asm2, findLabelAddresses(output));
 }
@@ -606,3 +628,5 @@ function showToast(message, type = 'info', duration = 3000) {
         }, 300);
     }, duration);
 }
+
+setMode();
