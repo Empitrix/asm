@@ -248,6 +248,12 @@ require(['vs/editor/editor.main'], function () {
 const tabButtons = document.querySelectorAll('.tab-button');
 const editorContainers = document.querySelectorAll('.editor-container');
 function activateTab(tabName) {
+    if (tabName === 'help') {
+        document.getElementById("preview").style.display = "none";
+    }
+    else {
+        document.getElementById("preview").style.display = "block";
+    }
     tabButtons.forEach(btn => btn.classList.remove('active'));
     editorContainers.forEach(container => container.classList.remove('active'));
     const activeButton = document.querySelector(`.tab-button[data-tab="${tabName}"]`);

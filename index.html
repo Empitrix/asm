@@ -60,9 +60,9 @@
             <div id="asm2-editor" class="editor-container"></div>
             <div id="c2-editor" class="editor-container"></div>
             <div id="help-editor" class="editor-container">
-                <div id="content" style="padding: 0 10px 10px 10px;">hiiiiiiiiiii</div>
+                <div id="content" style="padding: 0 10px 10px 10px; width: 95vw;"></div>
                 <script>
-                    fetch('https://github.com/Empitrix/amethyst/raw/refs/heads/master/README.md')
+                    fetch('/help.md')
                         .then(response => response.text())
                         .then(data => {
                             document.getElementById('content').innerHTML = marked.parse(data);
@@ -71,7 +71,7 @@
                             console.error('Error fetching the Markdown file:', error);
                             data = '# Amethyst\n\nAmethyst is a cross-platform compiler/assembler for pic10f20x MCUs.\n\nFor more information, visit the [GitHub repository](https://github.com/Empitrix/amethyst/blob/master/README.md).';
                             document.getElementById('content').innerHTML = marked.parse(data);
-                        });
+                        });                  
                 </script>
             </div>
         </div>
