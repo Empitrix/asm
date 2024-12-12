@@ -446,6 +446,31 @@ function stepping() {
 }
 
 
+function addErrorDecoration(msg, lineNumber) {
+    const decorations = editors.c1.deltaDecorations([], [
+        {
+            range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+            options: {
+                isWholeLine: true,
+                className: 'errorLine',
+                glyphMarginClassName: 'errorGlyph', 
+                hoverMessage: { value: `**Error:**\n\n\n\n\`\`\`\n${msg}\n\`\`\`` }
+            }
+        }
+    ]);
+    return decorations;
+}
+
+
+function findErrorLineNumber(errorMessage) {
+    const regex = /(\d+)\s*\|/; 
+    const match = errorMessage.match(regex);
+    if (match) {
+        return parseInt(match[1], 10); 
+    }
+    return null; 
+}
+
 function runAssembler() {
 
     let data = "";
@@ -454,7 +479,10 @@ function runAssembler() {
         data = initCompiler(content);
         let compiler_diag = getCompilerDiag();
         if(compiler_diag != ""){
-          addLogEntry("ERROR", compiler_diag);
+          lineNumber = findErrorLineNumber(compiler_diag);
+          console.log(lineNumber);
+          addLogEntry("ERROR", compiler_diag.replace("Err:", ""));
+          addErrorDecoration(compiler_diag.replace("Err:", ""), lineNumber );
           return;
         }
         editor.setValue(data);
