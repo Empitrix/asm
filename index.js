@@ -2,6 +2,7 @@ initAssembler = Module.cwrap('get_assemble', 'string', ['string']);
 getMchineCode = Module.cwrap('get_mcode', 'string', ['void']);
 getLength = Module.cwrap('get_length', 'string', ['void']);
 initCompiler = Module.cwrap('run_compiler', 'string', ['string']);
+getCompilerDiag = Module.cwrap('get_compiler_diag', 'string', ['void']);
 //load assembler mode from local storage
 let assemblerMode = localStorage.getItem('mode') === 'assembler';
 if (!assemblerMode) {
@@ -451,6 +452,11 @@ function runAssembler() {
     if (assemblerMode === false) {
         let content = editors.c1.getValue();
         data = initCompiler(content);
+        let compiler_diag = getCompilerDiag();
+        if(compiler_diag != ""){
+          addLogEntry("ERROR", compiler_diag);
+          return;
+        }
         editor.setValue(data);
     }
     else {

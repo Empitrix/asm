@@ -15,6 +15,8 @@ static char output_buffer[1024] = { 0 };
 
 static char compiler_buffer[1024] = { 0 };
 
+static char compiler_log[1024] = { 0 };
+
 
 
 void str_split(char *src, char *split, TBL *tbl){
@@ -102,7 +104,10 @@ char *get_length(void){
 
 /* COMPIELR */
 
+
 char *run_compiler(char *inpt){
+	set_compiler_diag_exit(0);
+
 	memset(compiler_buffer, 0, sizeof(compiler_buffer));
 
 	compiler_clean();
@@ -118,6 +123,15 @@ char *run_compiler(char *inpt){
 
 
 	qparser(&tkns, 0, AST_NO_STATEMENT);
+
+	// Check for error diagnostics
+	compiling_failed(compiler_log);  // Check that if compiler failed or not
+	// Check function main exists
+	if(qfunc_exists("main") != 1){
+		sprintf(compiler_log, "Function \"main\" does not exists!\n");
+		return "";
+	}
+
 	update_children();
 
 
@@ -135,3 +149,6 @@ char *run_compiler(char *inpt){
 }
 
 
+char *get_compiler_diag(){
+	return compiler_log;
+}
